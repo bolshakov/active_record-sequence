@@ -1,2 +1,6 @@
 inherit_gem:
   spbtv_code_style: .strict_rubocop.yml
+
+AllCops:
+  Exclude:
+    - gemfiles/**/*
