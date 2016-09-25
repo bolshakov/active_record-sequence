@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Tema Bolshakov']
   spec.email         = ['abolshakov@spbtv.com']
 
-  spec.summary       = "Provide access to PostgreSQL's sequence"
-  spec.description   = "Provide access to PostgreSQL's sequence"
+  spec.summary       = "Provide access to PostgreSQL's sequences"
+  spec.description   = "Provide access to PostgreSQL's sequences"
   spec.homepage      = 'https://github.com/bolshakov/active_record-sequence'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
