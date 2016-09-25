@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/bolshakov/active_record-sequence.svg?branch=master)](https://travis-ci.org/bolshakov/active_record-sequence)
+[![Gem Version](https://badge.fury.io/rb/active_record-sequence.svg)](https://badge.fury.io/rb/active_record-sequence)
 
 # ActiveRecord::Sequence
 
