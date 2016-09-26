@@ -4,7 +4,7 @@ RSpec.describe ActiveRecord::Sequence do
   let(:sequence) { described_class.new(sequence_name) }
   let(:another_sequence) { described_class.new(another_sequence_name) }
 
-  delegate :connection, to: ActiveRecord::Sequence
+  delegate :connection, to: ActiveRecord::Base
 
   def ensure_sequence_not_exists(name)
     connection.execute("DROP SEQUENCE #{name};")

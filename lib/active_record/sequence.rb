@@ -36,7 +36,9 @@ module ActiveRecord
       def create(name, options = {})
         create_sql = SequenceSQLBuilder.new(name, options).to_sql
         handle_postgres_errors(CREATE_ERRORS) do
-          connection.execute(create_sql)
+          with_connection do |connection|
+            connection.execute(create_sql)
+          end
         end
         new(name)
       end
@@ -50,12 +52,17 @@ module ActiveRecord
       def drop(name)
         drop_sql = format('DROP SEQUENCE %s', name)
         handle_postgres_errors(DROP_ERRORS) do
-          connection.execute(drop_sql)
+          with_connection do |connection|
+            connection.execute(drop_sql)
+          end
         end
       end
 
-      def connection
-        @connection ||= ActiveRecord::Base.retrieve_connection
+      # @api private
+      def with_connection
+        ActiveRecord::Base.connection_pool.with_connection do |connection|
+          yield(connection)
+        end
       end
 
       # @param mappings [{}] from PG errors to library errors
@@ -73,7 +80,6 @@ module ActiveRecord
     # @param name [String]
     def initialize(name)
       @name = name
-      @connection = self.class.connection
     end
 
     NEXT_ERRORS = {
@@ -104,14 +110,22 @@ module ActiveRecord
 
     private
 
-    attr_reader :connection
     delegate :handle_postgres_errors, to: :class
+    delegate :with_connection, to: :class
 
     def execute(sql, *args)
-      quoted_args = args.map { |arg| connection.quote(arg) }
-      formatted_sql = format(sql, *quoted_args)
+      with_connection do |connection|
+        connection.select_value(prepare_query(sql, *args)).to_i
+      end
+    end
 
-      connection.select_value(formatted_sql).to_i
+    def prepare_query(sql, *args)
+      quoted_args = args.map do |arg|
+        with_connection do |connection|
+          connection.quote(arg)
+        end
+      end
+      format(sql, *quoted_args)
     end
   end
 end
