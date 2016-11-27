@@ -95,7 +95,7 @@ sequence.next #=> 2
 # etc.
 ```
 
-You con use previously created sequence by instantiating `Sequence` class:
+You can use previously created sequence by instantiating `Sequence` class:
 
 ```ruby
 ActiveRecord::Sequence.create('numbers', max: 2, cycle: true)
