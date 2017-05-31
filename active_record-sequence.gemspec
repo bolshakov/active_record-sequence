@@ -24,5 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pg', '0.19.0'
   spec.add_development_dependency 'rake', '11.3.0'
   spec.add_development_dependency 'rspec', '3.5.0'
+  spec.add_development_dependency 'rubocop', '0.40.0'
   spec.add_development_dependency 'spbtv_code_style', '1.4.1'
 end
