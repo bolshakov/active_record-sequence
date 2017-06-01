@@ -1,7 +1,7 @@
 require 'yaml'
 
-ruby_versions = %w(2.2.5 2.3.1)
-rails_versions = %w(4.2.7 5.0.0)
+ruby_versions = %w(2.3.4 2.4.0)
+rails_versions = %w(4.2.8 5.1.1)
 
 rails_versions.each do |rails_version|
   appraise "rails_#{rails_version}" do
