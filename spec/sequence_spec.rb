@@ -6,6 +6,10 @@ RSpec.describe ActiveRecord::Sequence do
 
   delegate :connection, to: ActiveRecord::Base
 
+  AlreadyExist = ActiveRecord::Sequence::AlreadyExist
+  CurrentValueUndefined = ActiveRecord::Sequence::CurrentValueUndefined
+  NotExist = ActiveRecord::Sequence::NotExist
+
   def ensure_sequence_not_exists(name)
     connection.execute("DROP SEQUENCE #{name};")
   rescue ActiveRecord::StatementInvalid # rubocop:disable Lint/HandleExceptions
@@ -48,18 +52,14 @@ RSpec.describe ActiveRecord::Sequence do
       described_class.create(sequence_name, min: -2, increment: -1)
       expect(sequence.next).to eq(-1)
       expect(sequence.next).to eq(-2)
-      expect do
-        sequence.next
-      end.to raise_error(StopIteration)
+      expect { sequence.next }.to raise_error(StopIteration)
     end
 
     it 'creates new sequence with custom maximum value' do
       described_class.create(sequence_name, max: 2)
       expect(sequence.next).to eq(1)
       expect(sequence.next).to eq(2)
-      expect do
-        sequence.next
-      end.to raise_error(StopIteration)
+      expect { sequence.next }.to raise_error(StopIteration)
     end
 
     it 'creates new cyclic sequence' do
@@ -71,9 +71,7 @@ RSpec.describe ActiveRecord::Sequence do
 
     it 'fails with error if sequence already exists' do
       described_class.create(sequence_name)
-      expect do
-        described_class.create(sequence_name)
-      end.to raise_error(ActiveRecord::Sequence::AlreadyExist)
+      expect { described_class.create(sequence_name) }.to raise_error(AlreadyExist)
     end
   end
 
@@ -84,14 +82,12 @@ RSpec.describe ActiveRecord::Sequence do
 
     it 'drops existing sequence' do
       described_class.drop(sequence_name)
-      expect { sequence.next }.to raise_error(ActiveRecord::Sequence::NotExist)
+      expect { sequence.next }.to raise_error(NotExist)
     end
 
     context 'when sequence not exists' do
       it 'fail with error' do
-        expect do
-          described_class.drop('another_test_sequence')
-        end.to raise_error(ActiveRecord::Sequence::NotExist)
+        expect { described_class.drop('another_test_sequence') }.to raise_error(NotExist)
       end
     end
   end
@@ -115,9 +111,7 @@ RSpec.describe ActiveRecord::Sequence do
     context 'when called on not existing sequence' do
       it 'fails with NotExist error' do
         not_existing_sequence = described_class.new('not_existing_sequence')
-        expect do
-          not_existing_sequence.next
-        end.to raise_error(ActiveRecord::Sequence::NotExist)
+        expect { not_existing_sequence.next }.to raise_error(NotExist)
       end
     end
   end
@@ -130,9 +124,7 @@ RSpec.describe ActiveRecord::Sequence do
 
     context 'when called on sequence with not defined current value' do
       it 'fails with error' do
-        expect do
-          sequence.peek
-        end.to raise_error(ActiveRecord::Sequence::CurrentValueUndefined)
+        expect { sequence.peek }.to raise_error(CurrentValueUndefined)
       end
     end
 
@@ -153,12 +145,11 @@ RSpec.describe ActiveRecord::Sequence do
     end
 
     context 'when called on not existing sequence' do
-      it 'fails with NotExist error' do
-        not_existing_sequence = described_class.new('not_existing_sequence')
-        expect do
-          not_existing_sequence.peek
-        end.to raise_error(ActiveRecord::Sequence::NotExist)
-      end
+      subject { -> { not_existing_sequence.peek } }
+
+      let(:not_existing_sequence) { described_class.new('not_existing_sequence') }
+
+      it { is_expected.to raise_error(NotExist) }
     end
   end
 end
