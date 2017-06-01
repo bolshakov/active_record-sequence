@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'activerecord', '>= 3.2', '< 6.0.0'
   spec.add_development_dependency 'appraisal', '2.1.0'
-  spec.add_development_dependency 'bundler', '1.13.1'
+  spec.add_development_dependency 'bundler', '1.14.6'
   spec.add_development_dependency 'pg', '0.19.0'
   spec.add_development_dependency 'rake', '11.3.0'
   spec.add_development_dependency 'rspec', '3.5.0'
