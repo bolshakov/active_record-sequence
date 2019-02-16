@@ -84,6 +84,7 @@ module ActiveRecord
 
     NEXT_ERRORS = {
       'PG::ObjectNotInPrerequisiteState' => StopIteration,
+      'PG::SequenceGeneratorLimitExceeded' => StopIteration,
       'PG::UndefinedTable' => ActiveRecord::Sequence::NotExist,
     }.freeze
 

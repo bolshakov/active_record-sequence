@@ -1,6 +1,22 @@
-inherit_gem:
-  spbtv_code_style: .strict_rubocop.yml
-
 AllCops:
   Exclude:
     - gemfiles/**/*
+
+Metrics/LineLength:
+  Max: 120
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
+Style/FormatStringToken:
+  Enabled: false
