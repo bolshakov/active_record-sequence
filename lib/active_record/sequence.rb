@@ -1,7 +1,7 @@
-require 'active_record'
-require 'active_record/sequence/version'
-require 'active_record/sequence/error'
-require 'active_support/core_ext/module/delegation'
+require "active_record"
+require "active_record/sequence/version"
+require "active_record/sequence/error"
+require "active_support/core_ext/module/delegation"
 
 module ActiveRecord
   # Usage
@@ -11,11 +11,11 @@ module ActiveRecord
   #   sequence.next #=> 2
   #
   class Sequence
-    autoload :SequenceSQLBuilder, 'active_record/sequence/sequence_sql_builder'
+    autoload :SequenceSQLBuilder, "active_record/sequence/sequence_sql_builder"
 
     class << self
       CREATE_ERRORS = {
-        'PG::DuplicateTable' => ActiveRecord::Sequence::AlreadyExist,
+        "PG::DuplicateTable" => ActiveRecord::Sequence::AlreadyExist
       }.freeze
       # Create sequence
       # @param name [String]
@@ -44,13 +44,13 @@ module ActiveRecord
       end
 
       DROP_ERRORS = {
-        'PG::UndefinedTable' => NotExist,
+        "PG::UndefinedTable" => NotExist
       }.freeze
 
       # @param name [String]
       # @return [void]
       def drop(name)
-        drop_sql = format('DROP SEQUENCE %s', name)
+        drop_sql = format("DROP SEQUENCE %s", name)
         handle_postgres_errors(DROP_ERRORS) do
           with_connection do |connection|
             connection.execute(drop_sql)
@@ -83,27 +83,27 @@ module ActiveRecord
     end
 
     NEXT_ERRORS = {
-      'PG::ObjectNotInPrerequisiteState' => StopIteration,
-      'PG::SequenceGeneratorLimitExceeded' => StopIteration,
-      'PG::UndefinedTable' => ActiveRecord::Sequence::NotExist,
+      "PG::ObjectNotInPrerequisiteState" => StopIteration,
+      "PG::SequenceGeneratorLimitExceeded" => StopIteration,
+      "PG::UndefinedTable" => ActiveRecord::Sequence::NotExist
     }.freeze
 
     # @return [Integer]
     def next
-      next_sql = 'SELECT nextval(%s)'.freeze
+      next_sql = "SELECT nextval(%s)".freeze
       handle_postgres_errors(NEXT_ERRORS) do
         execute(next_sql, name)
       end
     end
 
     PEEK_ERRORS = {
-      'PG::ObjectNotInPrerequisiteState' => ActiveRecord::Sequence::CurrentValueUndefined,
-      'PG::UndefinedTable' => ActiveRecord::Sequence::NotExist,
+      "PG::ObjectNotInPrerequisiteState" => ActiveRecord::Sequence::CurrentValueUndefined,
+      "PG::UndefinedTable" => ActiveRecord::Sequence::NotExist
     }.freeze
 
     # @return [Integer]
     def peek
-      current_sql = 'SELECT currval(%s)'.freeze
+      current_sql = "SELECT currval(%s)".freeze
       handle_postgres_errors(PEEK_ERRORS) do
         execute(current_sql, name)
       end

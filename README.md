@@ -122,15 +122,6 @@ which will create a git tag for the version, push git commits and tags, and push
 file to [rubygems.org](https://rubygems.org).
 
 
-We test this gem against different versions of `ActiveRecord` using [appraisal](https://github.com/thoughtbot/appraisal) gem.
-To regenerate gemfiles run:
-
-    $ appraisal install
-
-To run specs against all versions:
-
-    $ appraisal rake spec
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/bolshakov/active_record-sequence.
