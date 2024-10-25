@@ -5,8 +5,9 @@ require 'active_record/sequence/version'
 Gem::Specification.new do |spec|
   spec.name          = 'active_record-sequence'
   spec.version       = ActiveRecord::Sequence::VERSION
-  spec.authors       = ['Tema Bolshakov']
-  spec.email         = ['abolshakov@spbtv.com']
+  spec.authors       = ['Tëma Bolshakov']
+  spec.email         = ['tema@bolshakov.dev']
+  spec.license       = "MIT"
 
   spec.summary       = "Provide access to PostgreSQL's sequences"
   spec.description   = "Provide access to PostgreSQL's sequences"
