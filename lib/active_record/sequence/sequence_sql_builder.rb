@@ -8,7 +8,7 @@ module ActiveRecord
 
       def initialize(name, options = {})
         @options = options
-        @parts = [format('CREATE SEQUENCE %s', name)]
+        @parts = [format("CREATE SEQUENCE %s", name)]
       end
 
       def to_sql
@@ -17,29 +17,29 @@ module ActiveRecord
         configure_max_value
         configure_start_value
         configure_cycle
-        parts.join(' ')
+        parts.join(" ")
       end
 
       private
 
       def configure_increment
-        parts << format('INCREMENT BY %s', options[:increment]) if options[:increment]
+        parts << format("INCREMENT BY %s", options[:increment]) if options[:increment]
       end
 
       def configure_min_value
-        parts << format('MINVALUE %s', options[:min]) if options[:min]
+        parts << format("MINVALUE %s", options[:min]) if options[:min]
       end
 
       def configure_max_value
-        parts << format('MAXVALUE %s', options[:max]) if options[:max]
+        parts << format("MAXVALUE %s", options[:max]) if options[:max]
       end
 
       def configure_start_value
-        parts << format('START %s', options[:start]) if options[:start]
+        parts << format("START %s", options[:start]) if options[:start]
       end
 
       def configure_cycle
-        parts << (options.fetch(:cycle, false) ? 'CYCLE' : 'NO CYCLE')
+        parts << (options.fetch(:cycle, false) ? "CYCLE" : "NO CYCLE")
       end
     end
 
