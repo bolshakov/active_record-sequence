@@ -1,0 +1,44 @@
+name: Ruby
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Ruby ${{ matrix.ruby }}, Rails ${{ matrix.rails }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        ruby:
+          - '3.3.5'
+          - '3.2.5'
+        rails:
+          - '7.2.1.2'
+          - '6.1.7.10'
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure Dependencies
+      run: |
+        echo "gem 'rails', '${{ matrix.rails }}'" >> Gemfile
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - name: Run Specs
+      run: bundle exec rake spec
